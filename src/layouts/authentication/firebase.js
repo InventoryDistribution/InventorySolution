@@ -19,12 +19,13 @@ import {
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD1Y3vBgvFLdzM38boQh4MQ5JlNP9kN9uM",
-  authDomain: "email-authentication-41f25.firebaseapp.com",
-  projectId: "email-authentication-41f25",
-  storageBucket: "email-authentication-41f25.appspot.com",
-  messagingSenderId: "561807034021",
-  appId: "1:561807034021:web:6e29ab1d965137179aaf4c"
+  apiKey: "AIzaSyDfgllt4KkEfDLODibbLexcSETXYX4AtMQ",
+  authDomain: "inventory-distribution-7ccf6.firebaseapp.com",
+  projectId: "inventory-distribution-7ccf6",
+  storageBucket: "inventory-distribution-7ccf6.appspot.com",
+  messagingSenderId: "383639719994",
+  appId: "1:383639719994:web:f65118d4f06f1bcd376503",
+  measurementId: "G-EKR6VNK866"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -62,7 +63,7 @@ const logInWithEmailAndPassword = async (email, password) => {
   }
 };
 
-const registerWithEmailAndPassword = async (name, email, password) => {
+const registerWithEmailAndPassword = async (name, email, password,) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;

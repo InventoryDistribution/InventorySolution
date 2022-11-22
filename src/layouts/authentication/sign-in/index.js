@@ -1,18 +1,27 @@
 import { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
-// import SoftBox from "components/SoftBox";
-// import SoftTypography from "components/SoftTypography";
-// import SoftInput from "components/SoftInput";
-// import SoftButton from "components/SoftButton";
+import SoftBox from "components/SoftBox";
+import SoftTypography from "components/SoftTypography";
+import SoftInput from "components/SoftInput";
+import SoftButton from "components/SoftButton";
 import CoverLayout from "layouts/authentication/components/CoverLayout";
 import curved9 from "assets/images/curved-images/curved-6.jpg";
 import PhoneInput from "react-phone-number-input";
-import { Form, Alert } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+import { Form, Alert,Button } from "react-bootstrap";
 import "react-phone-number-input/style.css"
 import { useUserAuth } from "../../context/user-auth";
+// import "./signin.css"
 
 function SignIn() {
+  const button = { 
+    width:"170px",
+    height:"39px",
+    border:"none",
+    borderRadius:"16px",
+    background: "#0B2F8A",
+    boxShadow:" 0px 8px 24px -2px rgba(11, 47, 138, 0.6)",
+    color:"white",
+  }
   const [error, setError] = useState("");
   const [number, setNumber] = useState("");
   const [flag, setFlag] = useState(false);
@@ -52,7 +61,6 @@ function SignIn() {
       image={curved9}
     >
     <div className="p-4 box">
-    <h2 className="mb-3">Firebase Phone Auth</h2>
     {error && <Alert variant="danger">{error}</Alert>}
     <Form onSubmit={getOtp} style={{ display: !flag ? "block" : "none" }}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -64,12 +72,12 @@ function SignIn() {
         />
         <div id="recaptcha-container"></div>
       </Form.Group>
-      <div className="button-right">
+      <div className="button-right" style={{marginTop:"50px",display:"flex",flexDirection:"row"}}>
         <Link to="/">
-          <Button variant="secondary">Cancel</Button>
+          <Button variant="secondary" style={button}>Cancel</Button>
         </Link>
         &nbsp;
-        <Button type="submit" variant="primary">
+        <Button type="submit" variant="primary" style={button}>
           Send Otp
         </Button>
       </div>
@@ -79,23 +87,36 @@ function SignIn() {
       <Form.Group className="mb-3" controlId="formBasicOtp">
         <Form.Control
           type="otp"
-          placeholder="Enter OTP"
+          placeholder=" Enter OTP"
           onChange={(e) => setOtp(e.target.value)}
+          style={{width:"250px",height:"40px",borderRadius:"10px",borderColor:"#0B2F8A",}}
         />
       </Form.Group>
-      <div className="button-right">
+      <div className="button-right"style={{marginTop:"50px",display:"flex",flexDirection:"row"}}>
         <Link to="/">
-          <Button variant="secondary">Cancel</Button>
+          <Button style={button}>Cancel</Button>
         </Link>
         &nbsp;
-        <Button type="submit" variant="primary">
+        <Button type="submit" style={button}>
           Verify
         </Button>
       </div>
     </Form>
-    <Link to="/authentication/email-signin">
-          <Button variant="secondary">Register</Button>
-        </Link>
+    <SoftBox mt={3} textAlign="center">
+    <SoftTypography variant="button" color="text" fontWeight="regular">
+    Don&apos;t have an account?{" "}
+      <SoftTypography
+        component={Link}
+        to="/authentication/email-signin"
+        variant="button"
+        color="dark"
+        fontWeight="bold"
+        textGradient
+      >
+        Register
+      </SoftTypography>
+    </SoftTypography>
+  </SoftBox>
   </div>
     </CoverLayout>
   );
