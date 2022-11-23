@@ -1,7 +1,3 @@
-import Grid from "@mui/material/Grid";
-import Icon from "@mui/material/Icon";
-// Soft UI Dashboard React examples
-import Table from "examples/Tables/Table";
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
@@ -14,13 +10,8 @@ import Footer from "examples/Footer";
 
 // Soft UI Dashboard React base styles
 import typography from "assets/theme/base/typography";
-import Breadcrumbs from "examples/Breadcrumbs";
-// Data
 import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
-import SoftInput from "components/SoftInput";
-import { backgroundImage } from "assets/images/curved-images/white-curved.jpeg";
-import { Box } from "@mui/material/Box";
-import { boxShadow } from "assets/theme/functions/boxShadow";
+
 
 function FilterCategory() {
   const { size } = typography;

@@ -76,6 +76,20 @@ function SignEmail() {
           </SoftTypography>
         </SoftTypography>
       </SoftBox>
+      <SoftBox textAlign="center">
+        <SoftTypography variant="button" color="text" fontWeight="regular">
+          Forgot Password?{" "}
+          <SoftTypography
+            component={Link}
+            to="/authentication/otp-verification"
+            variant="button"
+            style={{color:'#0B2F8A'}}
+            fontWeight="medium"
+          >
+            Click here
+          </SoftTypography>
+        </SoftTypography>
+      </SoftBox>
       </SoftBox>
     </CoverLayout>
   );

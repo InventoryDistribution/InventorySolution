@@ -1,25 +1,53 @@
 import Grid from "@mui/material/Grid";
-import Icon from "@mui/material/Icon";
-// Soft UI Dashboard React examples
-import Table from "examples/Tables/Table";
-// Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
-import { Link } from "react-router-dom";
+import { Link, useParams,useNavigate } from "react-router-dom";
 import SoftButton from "components/SoftButton";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-import typography from "assets/theme/base/typography";
-import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
 import SoftInput from "components/SoftInput";
+import { Form } from "react-bootstrap";
 import "../modal.css"
 import { useState } from "react";
+import {toast} from "react-toastify";
+
+const initialState ={
+  name: "",
+  email: "",
+  phone: "",
+  code: "",
+}
 
 
 function EditProfile() {
-  const { size } = typography;
-  const { chart, items } = reportsBarChartData;
+  const [state,setState] = useState(initialState);
+  const [date, setDate] = useState({});
+  const {name,email,phone,code} = state;
+  const navigate = useNavigate();
+
+
+  const handleInputChange = (e) =>{
+    const {name,value} = e.target;
+    setState({...state, [name]:value})
+  };
+  const handleSubmit =(e) =>{
+    e.preventDefault();
+    if (!name || !email || !phone || !code){
+      toast.error("please provide value in each input field" )
+    }
+    else{
+      fireDb.child("users").push(state, (err) =>{
+        if(err){
+          toast.error(err);
+        }else{
+          toast.success("Profile Updated Successfully")
+        }
+      } );
+      setTimeout(()=> navigate("/"),500);
+    }
+  };
+
   const text = {
     color: "#0B2F8A",
     fontSize: "15px",
@@ -27,11 +55,9 @@ function EditProfile() {
     marginRight: "10px",
   };
   const [modal, setModal] = useState(false);
-
   const toggleModal = () => {
     setModal(!modal);
   };
-
   if(modal) {
     document.body.classList.add('active-modal')
   } else {
@@ -40,7 +66,9 @@ function EditProfile() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      
       <SoftBox py={3} mb={15} textAlign="center">
+      <form onSubmit={handleSubmit}>
         <SoftTypography
           mb={6}
           style={{ color: "#0B2F8A", fontWeight: "700", fontSize: "30px", lineHeight: "30px" }}
@@ -63,6 +91,10 @@ function EditProfile() {
                 component: "search",
                 direction: "left",
               }}
+              id="name"
+              name="name"
+              value={name}
+              onChange = {handleInputChange}
             />
             </SoftBox>
           </SoftBox>
@@ -74,6 +106,10 @@ function EditProfile() {
         </SoftTypography>
         <SoftBox ml={2}>
         <SoftInput
+        id="email"
+        name="email"
+        value={email}
+        onChange = {handleInputChange}
         type="email"
           placeholder="krishna@gmail.com"
           icon={{
@@ -95,6 +131,10 @@ function EditProfile() {
             </SoftTypography>
             <SoftBox ml={2}>
             <SoftInput
+            id="code"
+            name="code"
+            value={code}
+            onChange = {handleInputChange}
             type="text"
               placeholder="AH0007854"
               icon={{
@@ -112,6 +152,10 @@ function EditProfile() {
         </SoftTypography>
         <SoftBox ml={2}>
         <SoftInput
+        id="phone"
+        name="phone"
+        value={phone}
+        onChange = {handleInputChange}
         type="tel"
           placeholder="9985492565"
           icon={{
@@ -136,9 +180,12 @@ function EditProfile() {
       >
       Update Profile
       </SoftButton>
+       
         </SoftTypography>
         
         </SoftBox>
+        <input type="submit" value="Save" />
+        </form>
         <SoftBox mt={6}>
           <SoftTypography
             style={{ color: "#0B2F8A", fontWeight: "700", fontSize: "35px", lineHeight: "30px" }}
@@ -220,6 +267,8 @@ function EditProfile() {
   )}
 </SoftBox>
     </SoftBox>
+      
+      
     <Footer />
     </DashboardLayout>
   );

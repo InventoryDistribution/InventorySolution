@@ -1,6 +1,4 @@
-// @mui material components
 import Grid from "@mui/material/Grid";
-// Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 

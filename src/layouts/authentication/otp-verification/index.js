@@ -1,28 +1,26 @@
-import { useState } from "react";
-
-// react-router-dom components
+import { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
-
-// @mui material components
-import Switch from "@mui/material/Switch";
-
-// Soft UI Dashboard React components
-// import OTPInput, { ResendOTP } from "otp-input-react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom";
+import { auth, sendPasswordReset } from "../firebase";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftInput from "components/SoftInput";
 import SoftButton from "components/SoftButton";
-
-// Authentication layout components
 import CoverLayout from "layouts/authentication/components/CoverLayout";
-
-// Images
 import curved9 from "assets/images/curved-images/curved-6.jpg";
 
 function OtpVerification() {
   const [rememberMe, setRememberMe] = useState(true);
-  const [OTP, setOTP] = useState("");
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  const [email, setEmail] = useState("");
+  const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loading) return;
+    if (user) navigate("/dashboard");
+  }, [user, loading]);
 
   return (
     <CoverLayout title="Verify OTP" image={curved9}>
@@ -30,58 +28,42 @@ function OtpVerification() {
         <SoftBox mb={2}>
           <SoftBox mb={1} ml={0.5}>
             <SoftTypography component="label" variant="caption" fontWeight="bold">
-              Enter OTP Here
+              Enter Registered Email
             </SoftTypography>
           </SoftBox>
-          <SoftInput type="tel" placeholder="Enter your OTP" />
-          {/*
-          <OTPInput value={OTP} onChange={setOTP} autoFocus OTPLength={6} otpType="number" disabled={false} secure />
-           <ResendOTP onResendClick={() => console.log("Resend clicked")} />
-  */}
+          <SoftInput type="email" placeholder="Enter your email" 
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}/>
         </SoftBox>
-
         <SoftBox mt={4} mb={1} textAlign="center">
           <SoftButton
             fullWidth
-            component={Link}
-            to="/dashboard"
             style={{
               backgroundColor: "#0B2F8A",
               color: "white",
               boxShadow: "0px 8px 24px -2px rgba(11, 47, 138, 0.6)",
               borderRadius: "16px",
             }}
+            onClick={() => sendPasswordReset(email)}
           >
-            Continue
+          Send password reset email
           </SoftButton>
         </SoftBox>
         <SoftBox mt={3} textAlign="center">
           <SoftTypography variant="button" color="text" fontWeight="regular">
-            Didn&apos;t Receive OTP?{" "}
+            Don&apos;t Have an Account?{" "}
             <SoftTypography
               component={Link}
               to="/authentication/sign-up"
               variant="button"
               fontWeight="medium"
               style={{ color: "#0B2F8A" }}
-            >
-              Click here
-            </SoftTypography>
-          </SoftTypography>
-        </SoftBox>
-        <SoftBox textAlign="center">
-          <SoftTypography>
-            <SoftTypography
-              component={Link}
-              to="/authentication/sign-up"
-              variant="button"
-              style={{ color: "#0B2F8A" }}
-              fontWeight="medium"
             >
               Register
             </SoftTypography>
           </SoftTypography>
         </SoftBox>
+        
       </SoftBox>
     </CoverLayout>
   );

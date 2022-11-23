@@ -1,5 +1,4 @@
 import Grid from "@mui/material/Grid";
-// Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import { Link } from "react-router-dom";
@@ -10,7 +9,6 @@ import Footer from "examples/Footer";
 import SoftInput from "components/SoftInput";
 import "../modal.css"
 import { useState } from "react";
-
 import { DataGrid } from '@mui/x-data-grid';
 
 const columns = [

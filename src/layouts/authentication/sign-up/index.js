@@ -36,7 +36,7 @@ function SignUp() {
 
   const register = () => {
     if (!name) alert("Please enter name");
-    registerWithEmailAndPassword(name, email, password);
+    registerWithEmailAndPassword(name, email, password,code,role,phone);
   };
 
   useEffect(() => {
