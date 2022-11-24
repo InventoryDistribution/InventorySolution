@@ -11,6 +11,10 @@ import { Form } from "react-bootstrap";
 import "../modal.css"
 import { useState } from "react";
 import {toast} from "react-toastify";
+import SoftAvatar from "components/SoftAvatar";
+import { storage } from "../authentication/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import user1 from "assets/images/curved-images/user.png"
 
 const initialState ={
   name: "",
@@ -25,8 +29,6 @@ function EditProfile() {
   const [date, setDate] = useState({});
   const {name,email,phone,code} = state;
   const navigate = useNavigate();
-
-
   const handleInputChange = (e) =>{
     const {name,value} = e.target;
     setState({...state, [name]:value})
@@ -63,6 +65,33 @@ function EditProfile() {
   } else {
     document.body.classList.remove('active-modal')
   }
+  
+  const [image, setImage] = useState(null);
+  const [url, setUrl] = useState(null);
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+// for picture
+  const handleSubmit1 = () => {
+    const imageRef = ref(storage, "image");
+    uploadBytes(imageRef, image)
+      .then(() => {
+        getDownloadURL(imageRef)
+          .then((url) => {
+            setUrl(url);
+          })
+          .catch((error) => {
+            console.log(error.message, "error getting the image url");
+          });
+        setImage(null);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -75,6 +104,11 @@ function EditProfile() {
         >
         Edit Your Profile
         </SoftTypography>
+        <SoftBox textAlign="center">
+        <SoftAvatar src={url} alt="Avatar" variant="circular" size="xl" box-shadow="xxl"/>
+        <input type="file" onChange={handleImageChange} />
+        <button onClick={handleSubmit1}>Submit</button>
+        </SoftBox>
         <Grid container spacing={2}>
         <Grid item xs={12} sm={2} xl={2}>
         </Grid>

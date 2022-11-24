@@ -19,9 +19,9 @@ import {
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 // Images
 import curved6 from "assets/images/curved-images/curved14.jpg";
-// import { storage } from "../firebase";
-// import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-// import { useUserAuth } from "layouts/context/user-auth";
+import { storage } from "../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useUserAuth } from "layouts/context/user-auth";
 import user1 from "assets/images/curved-images/user.png"
 
 function SignUp() {
@@ -44,53 +44,31 @@ function SignUp() {
     if (user) navigate("/dashboard");
   }, [user, loading]);
 
-  // const [image, setImage] = useState(null);
-  // const [url, setUrl] = useState(null);
-  // const [email, setEmail] = useState("");
-  // const [phone, setPhone] = useState("");
-  // const [name, setName] = useState("");
-  // const [code, setCode] = useState("");
-  // const [role, setRole] = useState("");
-  // const [error, setError] = useState("");
-  // const [password, setPassword] = useState("");
-  // const { signUp } = useUserAuth();
-  // let navigate = useNavigate();
-
-  // const handleSubmit1 = async (e) => {
-  //   e.preventDefault();
-  //   setError("");
-  //   try {
-  //     await signUp(email, password,phone,name,code,role);
-  //     navigate("/");
-  //   } catch (err) {
-  //     setError(err.message);
-  //   }
-  // };
-
-
-//   const handleImageChange = (e) => {
-//     if (e.target.files[0]) {
-//       setImage(e.target.files[0]);
-//     }
-//   };
-// // for picture
-//   const handleSubmit = () => {
-//     const imageRef = ref(storage, "image");
-//     uploadBytes(imageRef, image)
-//       .then(() => {
-//         getDownloadURL(imageRef)
-//           .then((url) => {
-//             setUrl(url);
-//           })
-//           .catch((error) => {
-//             console.log(error.message, "error getting the image url");
-//           });
-//         setImage(null);
-//       })
-//       .catch((error) => {
-//         console.log(error.message);
-//       });
-//   };
+  const [image, setImage] = useState(null);
+  const [url, setUrl] = useState(null);
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+// for picture
+  const handleSubmit = () => {
+    const imageRef = ref(storage, "image");
+    uploadBytes(imageRef, image)
+      .then(() => {
+        getDownloadURL(imageRef)
+          .then((url) => {
+            setUrl(url);
+          })
+          .catch((error) => {
+            console.log(error.message, "error getting the image url");
+          });
+        setImage(null);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
   return (
     <BasicLayout
       title="Welcome!"
@@ -112,8 +90,8 @@ function SignUp() {
       */}
       <SoftBox ml={15}>
         <SoftAvatar src={user1} alt="Avatar" variant="circular" size="xxl" box-shadow="xxl"/>
-       {/* <input type="file" onChange={handleImageChange} />
-    <button onClick={handleSubmit}>Submit</button>*/}
+        <input type="file" onChange={handleImageChange} />
+    <button onClick={handleSubmit}>Submit</button>
     </SoftBox>
         <SoftBox pt={2} pb={3} px={3}>
           <SoftBox component="form" role="form" >

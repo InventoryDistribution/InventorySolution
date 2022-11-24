@@ -23,7 +23,6 @@
 
 // Soft UI Dashboard React layouts
 import Dashboard from "layouts/dashboard";
-import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import OtpVerification from "layouts/authentication/otp-verification"
@@ -61,15 +60,7 @@ const routes = [
  
  
   { type: "title", title: "Account Pages", key: "account-pages" },
-  {
-    type: "collapse",
-    name: "Profile",
-    key: "profile",
-    route: "/profile",
-    icon: <CustomerSupport size="12px" />,
-    component: <Profile />,
-    noCollapse: true,
-  },
+
   {
     type: "collapse",
     name: "Sign In",
