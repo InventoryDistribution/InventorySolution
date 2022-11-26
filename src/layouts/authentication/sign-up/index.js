@@ -89,9 +89,9 @@ function SignUp() {
         <Separator />
       */}
       <SoftBox ml={15}>
-        <SoftAvatar src={user1} alt="Avatar" variant="circular" size="xxl" box-shadow="xxl"/>
+        <SoftAvatar src={url} alt="Avatar" variant="circular" size="xxl" box-shadow="xxl"/>
         <input type="file" onChange={handleImageChange} />
-    <button onClick={handleSubmit}>Submit</button>
+        <button onClick={handleSubmit}>Submit</button>
     </SoftBox>
         <SoftBox pt={2} pb={3} px={3}>
           <SoftBox component="form" role="form" >

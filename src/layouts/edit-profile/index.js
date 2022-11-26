@@ -83,7 +83,7 @@ function EditProfile() {
             setUrl(url);
           })
           .catch((error) => {
-            console.log(error.message, "error getting the image url");
+            Alert(error.message, "error getting the image url");
           });
         setImage(null);
       })
@@ -104,10 +104,10 @@ function EditProfile() {
         >
         Edit Your Profile
         </SoftTypography>
-        <SoftBox textAlign="center">
+        <SoftBox style={{display:"flex",justifyContent:"center"}} mb={9}>
         <SoftAvatar src={url} alt="Avatar" variant="circular" size="xl" box-shadow="xxl"/>
-        <input type="file" onChange={handleImageChange} />
-        <button onClick={handleSubmit1}>Submit</button>
+        <input type="file" onChange={handleImageChange} style={{position:"absolute",marginTop:"60px",marginLeft:"240px"}}/>
+        <SoftButton onClick={handleSubmit1} style={{position:"absolute",marginTop:"90px",marginLeft:"70px",}}>Submit</SoftButton>
         </SoftBox>
         <Grid container spacing={2}>
         <Grid item xs={12} sm={2} xl={2}>
