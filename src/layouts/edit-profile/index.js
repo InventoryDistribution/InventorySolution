@@ -7,48 +7,78 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import SoftInput from "components/SoftInput";
-import { Form } from "react-bootstrap";
+// import { Form } from "react-bootstrap";
 import "../modal.css"
 import { useState } from "react";
 import {toast} from "react-toastify";
 import SoftAvatar from "components/SoftAvatar";
-import { storage } from "../authentication/firebase";
+import { db, storage } from "../authentication/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import user1 from "assets/images/curved-images/user.png"
-
-const initialState ={
-  name: "",
-  email: "",
-  phone: "",
-  code: "",
-}
-
+// import user1 from "assets/images/curved-images/user.png"
+// import { auth } from 'layouts/authentication/firebase';
+import  {getAuth,  updateProfile } from "firebase/auth";
+import { updateDoc } from "firebase/firestore";
+// import { async } from "@firebase/util";
 
 function EditProfile() {
-  const [state,setState] = useState(initialState);
-  const [date, setDate] = useState({});
-  const {name,email,phone,code} = state;
+  // const [state,setState] = useState(initialState);
+  // const [date, setDate] = useState({});
+  const auth = getAuth();
+  const [changeDetails,setChangeDetails] = useState(false)
+  const [formData, setFormData] = useState({
+    name :auth.currentUser.name,
+    email: auth.currentUser.email,
+    code : auth.currentUser.code,
+    phone : auth.currentUser.phone
+  })
+  const {name,email,code,phone} = formData;
   const navigate = useNavigate();
-  const handleInputChange = (e) =>{
-    const {name,value} = e.target;
-    setState({...state, [name]:value})
-  };
-  const handleSubmit =(e) =>{
-    e.preventDefault();
-    if (!name || !email || !phone || !code){
-      toast.error("please provide value in each input field" )
+  function onChange(e) {
+    setFormData ((prevState) =>({
+      ...prevState,
+      [e.target.id]:e.target.value,
     }
-    else{
-      fireDb.child("users").push(state, (err) =>{
-        if(err){
-          toast.error(err);
-        }else{
-          toast.success("Profile Updated Successfully")
+    ))
+  }
+  function onSubmit(){
+    async(dispatch) =>{
+      try{
+        if(auth.currentUser.email !== email){
+          await updateProfile(auth.currentUser,{
+            email : email,
+          });
+          const docRef = doc(db, "users",auth.currentUser.uid )
+          await updateDoc(docRef,{
+            email,
+          })
         }
-      } );
-      setTimeout(()=> navigate("/"),500);
+        toast.success('profile details updated')
+      }catch(error){
+        toast.error("Could not update profile picture")
+      }
     }
-  };
+    }
+   
+  // const handleInputChange = (e) =>{
+  //   const {name,value} = e.target;
+  //   setState({...state, [name]:value})
+  // };
+  // const handleSubmit =(e) =>{
+  //   e.preventDefault();
+  //   if (!name || !email || !phone || !code){
+  //     toast.error("please provide value in each input field" )
+  //   }
+  //   else{
+  //     fireDb.child("users").push(state, (err) =>{
+  //       if(err){
+  //         toast.error(err);
+  //       }else{
+  //         toast.success("Profile Updated Successfully")
+  //       }
+  //     } );
+  //     setTimeout(()=> navigate("/"),500);
+  //   }
+  // };
 
   const text = {
     color: "#0B2F8A",
@@ -60,6 +90,7 @@ function EditProfile() {
   const toggleModal = () => {
     setModal(!modal);
   };
+
   if(modal) {
     document.body.classList.add('active-modal')
   } else {
@@ -97,7 +128,7 @@ function EditProfile() {
       <DashboardNavbar />
       
       <SoftBox py={3} mb={15} textAlign="center">
-      <form onSubmit={handleSubmit}>
+      
         <SoftTypography
           mb={6}
           style={{ color: "#0B2F8A", fontWeight: "700", fontSize: "30px", lineHeight: "30px" }}
@@ -128,7 +159,8 @@ function EditProfile() {
               id="name"
               name="name"
               value={name}
-              onChange = {handleInputChange}
+              disabled ={!changeDetails}
+              onChange = {onChange}
             />
             </SoftBox>
           </SoftBox>
@@ -143,7 +175,8 @@ function EditProfile() {
         id="email"
         name="email"
         value={email}
-        onChange = {handleInputChange}
+        disabled ={!changeDetails}
+        onChange = {onChange}
         type="email"
           placeholder="krishna@gmail.com"
           icon={{
@@ -168,7 +201,8 @@ function EditProfile() {
             id="code"
             name="code"
             value={code}
-            onChange = {handleInputChange}
+            disabled ={!changeDetails}
+            onChange = {onChange}
             type="text"
               placeholder="AH0007854"
               icon={{
@@ -189,7 +223,8 @@ function EditProfile() {
         id="phone"
         name="phone"
         value={phone}
-        onChange = {handleInputChange}
+        disabled ={!changeDetails}
+        onChange = {onChange}
         type="tel"
           placeholder="9985492565"
           icon={{
@@ -201,10 +236,9 @@ function EditProfile() {
       </SoftBox>
         </Grid>
       </Grid>
-     
         <SoftBox mt={6} >
         <SoftTypography>
-        <SoftButton
+        {/*<SoftButton
         variant="contained"
         color="info"
         style={{
@@ -213,13 +247,22 @@ function EditProfile() {
         }}
       >
       Update Profile
-      </SoftButton>
-       
+      </SoftButton>*/}
+      <p display="flex" >
+      Do you want to change your name?
+      <span onClick={()=>{
+        changeDetails && onSubmit()
+        setChangeDetails((prevState)=>!prevState )}
+      }
+        
+       >
+      {changeDetails ? "Apply change" :"Edit"}
+      </span>
+      </p>
         </SoftTypography>
         
         </SoftBox>
-        <input type="submit" value="Save" />
-        </form>
+       
         <SoftBox mt={6}>
           <SoftTypography
             style={{ color: "#0B2F8A", fontWeight: "700", fontSize: "35px", lineHeight: "30px" }}
@@ -243,7 +286,7 @@ function EditProfile() {
       </SoftBox>
       <SoftBox display="flex" style={{justifyContent:"center"}} mt={3}>
       <SoftTypography style={text} mt={1}>
-     New Password
+      New Password
       </SoftTypography>
       <SoftBox ml={2}>
       <SoftInput
@@ -301,8 +344,6 @@ function EditProfile() {
   )}
 </SoftBox>
     </SoftBox>
-      
-      
     <Footer />
     </DashboardLayout>
   );
